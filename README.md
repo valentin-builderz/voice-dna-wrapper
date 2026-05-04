@@ -1,6 +1,6 @@
-# Voice DNA Generator
+# Voice Room
 
-Builderz World Voice DNA extraction workspace.
+Builderz World Voice DNA extraction room.
 
 ## Vercel
 
