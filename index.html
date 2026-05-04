@@ -15,10 +15,7 @@
       <img src="assets/builderz world logo.png" alt="" class="brand__mark">
       <span>Voice DNA</span>
     </a>
-    <div class="nav-status" aria-label="Workspace status">
-      <span id="autosaveStatus">Draft ready</span>
-      <a class="nav__link" href="../Landingpage Cohort/index.html">Builderz World</a>
-    </div>
+    <a class="nav__link" href="https://www.builderz.world/">Builderz World</a>
   </nav>
 
   <main class="generator-shell">
@@ -30,11 +27,6 @@
         </div>
         <div class="workspace-brief">
           <p>Paste real writing. Add the context a ghostwriter would need. The system returns a reusable Voice DNA profile and prompt block for future chats.</p>
-          <div class="brief-metrics" aria-label="Extraction outputs">
-            <span>Voice profile</span>
-            <span>Copy rules</span>
-            <span>Prompt block</span>
-          </div>
         </div>
       </div>
     </section>
@@ -66,7 +58,7 @@
             <span id="readinessLabel">Not enough signal</span>
           </div>
 
-          <section class="studio-section" aria-labelledby="corpus-heading">
+          <section class="studio-section" data-step-section="corpus" aria-labelledby="corpus-heading">
             <div class="section-kicker">
               <span>01</span>
               <h2 id="corpus-heading">Corpus</h2>
@@ -90,7 +82,7 @@
             </div>
           </section>
 
-          <section class="studio-section" aria-labelledby="context-heading">
+          <section class="studio-section" data-step-section="context" aria-labelledby="context-heading">
             <div class="section-kicker">
               <span>02</span>
               <h2 id="context-heading">Context</h2>
@@ -107,7 +99,7 @@
             </div>
           </section>
 
-          <section class="studio-section" aria-labelledby="boundaries-heading">
+          <section class="studio-section" data-step-section="boundaries" aria-labelledby="boundaries-heading">
             <div class="section-kicker">
               <span>03</span>
               <h2 id="boundaries-heading">Boundaries</h2>
@@ -137,7 +129,7 @@
           <p class="form-status" id="dnaStatus" role="status" aria-live="polite"></p>
         </form>
 
-        <aside class="dna-panel dna-output studio-panel" aria-labelledby="output-heading">
+        <aside class="dna-panel dna-output studio-panel" data-step-section="output" aria-labelledby="output-heading">
           <div class="panel-topline">
             <span>Voice asset</span>
             <span id="outputState">Waiting</span>

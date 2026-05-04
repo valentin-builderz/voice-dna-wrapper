@@ -15,8 +15,8 @@ const generateButton = document.querySelector("#generateButton");
 const wordCount = document.querySelector("#wordCount");
 const readinessLabel = document.querySelector("#readinessLabel");
 const readinessBar = document.querySelector("#readinessBar");
-const autosaveStatus = document.querySelector("#autosaveStatus");
 const processSteps = [...document.querySelectorAll(".process-step")];
+const stepSections = [...document.querySelectorAll("[data-step-section]")];
 
 const STORAGE_KEY = "builderz.voiceDnaDraft.v1";
 let currentDna = "";
@@ -104,11 +104,9 @@ function saveDraft() {
   if (!voiceDnaForm) return;
   const data = Object.fromEntries(new FormData(voiceDnaForm));
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  if (autosaveStatus) autosaveStatus.textContent = "Draft saved";
 }
 
 function scheduleAutosave() {
-  if (autosaveStatus) autosaveStatus.textContent = "Saving...";
   clearTimeout(autosaveTimer);
   autosaveTimer = setTimeout(saveDraft, 350);
 }
@@ -131,8 +129,6 @@ function restoreDraft() {
 
       field.value = value;
     });
-
-    if (autosaveStatus) autosaveStatus.textContent = "Draft restored";
   } catch {
     localStorage.removeItem(STORAGE_KEY);
   }
@@ -195,6 +191,29 @@ updateReadiness();
     scheduleAutosave();
   });
 });
+
+if ("IntersectionObserver" in window && stepSections.length) {
+  const visibleSections = new Map();
+  const stepObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        visibleSections.set(entry.target.dataset.stepSection, entry.intersectionRatio);
+      } else {
+        visibleSections.delete(entry.target.dataset.stepSection);
+      }
+    });
+
+    const [activeStep] = [...visibleSections.entries()]
+      .sort((a, b) => b[1] - a[1])[0] || [];
+
+    if (activeStep) setActiveStep(activeStep);
+  }, {
+    rootMargin: "-28% 0px -46% 0px",
+    threshold: [0.1, 0.25, 0.5, 0.75],
+  });
+
+  stepSections.forEach((section) => stepObserver.observe(section));
+}
 
 voiceDnaForm?.addEventListener("change", scheduleAutosave);
 
@@ -269,5 +288,4 @@ clearDraft?.addEventListener("click", () => {
   resetResult();
   updateReadiness();
   setActiveStep("corpus");
-  if (autosaveStatus) autosaveStatus.textContent = "Draft cleared";
 });

@@ -832,17 +832,6 @@ h3 {
   transform: none;
 }
 
-.nav-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.nav-status > span {
-  color: var(--dim);
-  font-size: 12px;
-}
-
 .generator-intro--compact {
   padding-top: clamp(42px, 6vw, 78px);
   padding-bottom: clamp(26px, 4vw, 42px);
@@ -865,23 +854,6 @@ h3 {
 .workspace-brief p {
   margin: 0;
   font-size: 16px;
-}
-
-.brief-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.brief-metrics span {
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 7px 10px;
-  color: var(--sage);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .workspace-grid {
@@ -1211,10 +1183,6 @@ h3 {
   .output-actions,
   .studio-actions {
     grid-template-columns: 1fr;
-  }
-
-  .nav-status > span {
-    display: none;
   }
 
   .label-row {
