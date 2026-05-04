@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice DNA Generator - Builderz World</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0B2117">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="generator-page">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="index.html" aria-label="Voice DNA workspace">
+      <img src="assets/builderz world logo.png" alt="" class="brand__mark">
+      <span>Voice DNA</span>
+    </a>
+    <div class="nav-status" aria-label="Workspace status">
+      <span id="autosaveStatus">Draft ready</span>
+      <a class="nav__link" href="../Landingpage Cohort/index.html">Builderz World</a>
+    </div>
+  </nav>
+
+  <main class="generator-shell">
+    <section class="generator-intro generator-intro--compact" aria-labelledby="generator-title">
+      <div class="container generator-intro__grid">
+        <div>
+          <p class="eyebrow">Private workspace · Voice extraction</p>
+          <h1 id="generator-title">Build the voice layer before you ask for copy.</h1>
+        </div>
+        <div class="workspace-brief">
+          <p>Paste real writing. Add the context a ghostwriter would need. The system returns a reusable Voice DNA profile and prompt block for future chats.</p>
+          <div class="brief-metrics" aria-label="Extraction standards">
+            <span>Exact mechanism</span>
+            <span>Grok 4.3</span>
+            <span>No frontend key</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="generator-workspace" aria-label="Voice DNA workspace">
+      <div class="container workspace-grid">
+        <aside class="process-rail" aria-label="Extraction progress">
+          <div class="process-step is-active" data-step="corpus">
+            <span>01</span>
+            <p>Corpus</p>
+          </div>
+          <div class="process-step" data-step="context">
+            <span>02</span>
+            <p>Context</p>
+          </div>
+          <div class="process-step" data-step="boundaries">
+            <span>03</span>
+            <p>Boundaries</p>
+          </div>
+          <div class="process-step" data-step="output">
+            <span>04</span>
+            <p>Voice asset</p>
+          </div>
+        </aside>
+
+        <form class="dna-panel dna-form studio-panel" id="voiceDnaForm" novalidate>
+          <div class="panel-topline">
+            <span>Input material</span>
+            <span id="readinessLabel">Not enough signal</span>
+          </div>
+
+          <section class="studio-section" aria-labelledby="corpus-heading">
+            <div class="section-kicker">
+              <span>01</span>
+              <h2 id="corpus-heading">Corpus</h2>
+            </div>
+            <div class="field-group field-group--primary" id="samplesGroup">
+              <div class="label-row">
+                <label for="samples">Writing samples <span>required</span></label>
+                <output id="wordCount" for="samples">0 words</output>
+              </div>
+              <textarea id="samples" name="samples" rows="14" placeholder="Paste 3-5 pieces that sound like you: posts, emails, essays, notes, sales copy, internal memos, or rough drafts." required minlength="500"></textarea>
+              <p id="samplesHelp">Minimum viable signal starts around 500 characters. Standard confidence starts around 3,000 words. Forensic confidence starts around 10,000 words.</p>
+            </div>
+
+            <div class="readiness-meter" aria-label="Corpus readiness">
+              <div class="readiness-meter__bar"><span id="readinessBar"></span></div>
+              <div class="readiness-meter__labels">
+                <span>Preliminary</span>
+                <span>Standard</span>
+                <span>Forensic</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="studio-section" aria-labelledby="context-heading">
+            <div class="section-kicker">
+              <span>02</span>
+              <h2 id="context-heading">Context</h2>
+            </div>
+            <div class="field-grid">
+              <div class="field-group">
+                <label for="audience">Who do you write for? <span>optional</span></label>
+                <textarea id="audience" name="audience" rows="5" placeholder="Senior operators, founders, consultants, buyers, clients..."></textarea>
+              </div>
+              <div class="field-group">
+                <label for="context">What should the model understand? <span>optional</span></label>
+                <textarea id="context" name="context" rows="5" placeholder="Your offer, beliefs, industry, recurring enemies, positioning, standards..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="studio-section" aria-labelledby="boundaries-heading">
+            <div class="section-kicker">
+              <span>03</span>
+              <h2 id="boundaries-heading">Boundaries</h2>
+            </div>
+            <div class="field-group">
+              <label for="avoid">What should your copy never sound like? <span>optional</span></label>
+              <input id="avoid" name="avoid" type="text" placeholder="Generic AI, hype, creator-bro language, fake intimacy, empty thought leadership...">
+            </div>
+
+            <fieldset class="mode-row" aria-label="Output depth">
+              <legend>Extraction depth</legend>
+              <label>
+                <input type="radio" name="depth" value="standard" checked>
+                <span><b>Standard DNA</b><small>Profile + prompt block</small></span>
+              </label>
+              <label>
+                <input type="radio" name="depth" value="deep">
+                <span><b>Deep excavation</b><small>More exhaustive forensic read</small></span>
+              </label>
+            </fieldset>
+          </section>
+
+          <div class="studio-actions">
+            <button class="button button--primary dna-submit" id="generateButton" type="submit">Generate my Voice DNA</button>
+            <button class="button button--ghost" id="clearDraft" type="button">Clear draft</button>
+          </div>
+          <p class="form-status" id="dnaStatus" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="dna-panel dna-output studio-panel" aria-labelledby="output-heading">
+          <div class="panel-topline">
+            <span>Voice asset</span>
+            <span id="outputState">Waiting</span>
+          </div>
+          <h2 id="output-heading">Your Voice DNA will appear here.</h2>
+          <div class="output-placeholder" id="outputPlaceholder">
+            <p>The finished asset is designed to travel with your future chats:</p>
+            <div class="artifact-list">
+              <div><span>01</span><p>Voice profile</p></div>
+              <div><span>02</span><p>Belief map</p></div>
+              <div><span>03</span><p>Sentence rhythm</p></div>
+              <div><span>04</span><p>Copy rules</p></div>
+              <div><span>05</span><p>Paste-ready prompt block</p></div>
+            </div>
+          </div>
+          <article class="dna-result" id="dnaResult" hidden></article>
+          <div class="output-actions">
+            <button class="button button--ghost" id="copyDna" type="button" disabled>Copy Voice DNA</button>
+            <button class="button button--ghost" id="downloadDna" type="button" disabled>Download .md</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script src="generator.js"></script>
+</body>
+</html>
