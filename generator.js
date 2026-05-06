@@ -16,7 +16,7 @@ const wordCount = document.querySelector("#wordCount");
 const readinessLabel = document.querySelector("#readinessLabel");
 const readinessBar = document.querySelector("#readinessBar");
 const processSteps = [...document.querySelectorAll(".process-step")];
-const stepSections = [...document.querySelectorAll("[data-step-section]")];
+const stepSections = [...document.querySelectorAll("[data-step-section]:not([data-step-section='output'])")];
 
 const STORAGE_KEY = "builderz.voiceDnaDraft.v1";
 let currentDna = "";
@@ -229,6 +229,7 @@ if (voiceDnaForm) {
     }
 
     const formData = Object.fromEntries(new FormData(voiceDnaForm));
+    formData.depth = "deep";
 
     voiceDnaForm.classList.add("is-loading");
     if (generateButton) generateButton.textContent = "Extracting signal...";

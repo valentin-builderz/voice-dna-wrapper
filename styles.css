@@ -620,13 +620,42 @@ h3 {
 }
 
 .generator-page {
+  position: relative;
   background:
-    radial-gradient(circle at 78% 0%, rgba(171, 255, 192, 0.09), transparent 24rem),
-    radial-gradient(circle at 8% 34%, rgba(244, 239, 224, 0.055), transparent 24rem),
+    radial-gradient(circle at 82% 0%, rgba(171, 255, 192, 0.08), transparent 24rem),
+    radial-gradient(circle at 8% 34%, rgba(244, 239, 224, 0.05), transparent 24rem),
     linear-gradient(180deg, var(--bg-2), var(--bg) 58%, #07180F);
 }
 
+.generator-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 33, 23, 0.62), rgba(7, 24, 15, 0.88)),
+    url("assets/asset 16 - introspection.png") center top / cover no-repeat;
+  opacity: 0.24;
+  filter: saturate(0.82) contrast(1.08);
+  pointer-events: none;
+}
+
+.generator-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(244, 239, 224, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 239, 224, 0.02) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 78%, transparent 100%);
+  pointer-events: none;
+}
+
 .generator-shell {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
   padding-top: 76px;
 }
@@ -717,17 +746,22 @@ h3 {
 .field-group input {
   width: 100%;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.055);
+  background: rgba(3, 15, 10, 0.26);
   color: var(--text);
-  border-radius: 0;
-  padding: 15px 16px;
+  border-radius: 6px;
+  padding: 17px 18px;
+  font-size: 16px;
+  line-height: 1.55;
   resize: vertical;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .field-group textarea:focus,
 .field-group input:focus {
   outline: 2px solid rgba(171, 255, 192, 0.26);
   outline-offset: 2px;
+  background: rgba(3, 15, 10, 0.34);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16);
 }
 
 .field-group textarea::placeholder,
@@ -739,30 +773,6 @@ h3 {
   margin: 0;
   color: var(--dim);
   font-size: 13px;
-}
-
-.mode-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 4px 0 22px;
-}
-
-.mode-row label {
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0 14px;
-  color: var(--muted);
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.mode-row input {
-  accent-color: var(--mint);
 }
 
 .dna-submit {
@@ -814,8 +824,8 @@ h3 {
   padding: 18px 0;
   color: var(--text);
   font-family: var(--sans);
-  font-size: 14px;
-  line-height: 1.66;
+  font-size: 15.5px;
+  line-height: 1.72;
   white-space: pre-wrap;
 }
 
@@ -858,8 +868,8 @@ h3 {
 
 .workspace-grid {
   display: grid;
-  grid-template-columns: 118px minmax(0, 1fr) minmax(360px, 0.72fr);
-  gap: 18px;
+  grid-template-columns: 112px minmax(0, 1.08fr) minmax(360px, 0.7fr);
+  gap: 20px;
   align-items: start;
 }
 
@@ -905,6 +915,8 @@ h3 {
 
 .studio-panel {
   min-height: 620px;
+  border-radius: 6px;
+  backdrop-filter: blur(18px);
 }
 
 .studio-section {
@@ -955,7 +967,11 @@ h3 {
 }
 
 .field-group--primary textarea {
-  min-height: 340px;
+  min-height: 430px;
+  padding: 21px 22px;
+  font-size: 18px;
+  line-height: 1.68;
+  letter-spacing: 0;
 }
 
 .field-group textarea:hover,
@@ -1000,33 +1016,15 @@ h3 {
   text-transform: uppercase;
 }
 
-.mode-row {
-  border: 0;
-  padding: 0;
-}
-
-.mode-row legend {
-  margin-bottom: 10px;
-  color: var(--sage);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.mode-row label span {
-  display: grid;
-  gap: 2px;
-}
-
-.mode-row label b {
-  color: var(--text);
-  font-size: 13px;
-}
-
-.mode-row label small {
-  color: var(--dim);
-  font-size: 11px;
+.depth-note {
+  margin: -2px 0 0;
+  border: 1px solid rgba(171, 255, 192, 0.16);
+  border-radius: 6px;
+  background: rgba(171, 255, 192, 0.055);
+  color: var(--muted);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .studio-actions {
@@ -1179,7 +1177,6 @@ h3 {
   }
 
   .field-grid,
-  .mode-row,
   .output-actions,
   .studio-actions {
     grid-template-columns: 1fr;
