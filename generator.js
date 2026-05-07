@@ -129,13 +129,55 @@ function restoreDraft() {
   }
 }
 
+function stripMarkdownSyntax(value) {
+  return value
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/__(.*?)__/g, "$1")
+    .replace(/`{1,3}([^`]+)`{1,3}/g, "$1")
+    .trim();
+}
+
+function getSummaryFromDna(markdown) {
+  const simpleSection = markdown.match(/(?:^|\n)(?:#{1,3}\s*)?(?:\*\*)?Simple summary(?:\*\*)?\s*\n+([\s\S]*?)(?=\n\s*(?:---|#{1,3}\s|\*\*Thorough Voice DNA Profile\*\*|Thorough Voice DNA Profile|```|$))/i);
+  if (simpleSection?.[1]?.trim()) {
+    return stripMarkdownSyntax(simpleSection[1]);
+  }
+
+  const firstParagraph = markdown
+    .replace(/```[\s\S]*?```/g, "")
+    .split(/\n{2,}/)
+    .map((item) => stripMarkdownSyntax(item))
+    .find((item) => item && !/^simple summary$/i.test(item));
+
+  return firstParagraph || "Your Voice DNA is ready. The full profile is available to copy or download below.";
+}
+
+function renderVisibleSummary(markdown) {
+  if (!dnaResult) return;
+  const summary = getSummaryFromDna(markdown);
+
+  dnaResult.replaceChildren();
+  const title = document.createElement("h3");
+  title.textContent = "How you sound";
+
+  const body = document.createElement("p");
+  body.textContent = summary;
+
+  const note = document.createElement("p");
+  note.className = "dna-result__note";
+  note.textContent = "The full Voice DNA is ready in the background. Copy it or download the Markdown file below and attach it the next time you use AI.";
+
+  dnaResult.append(title, body, note);
+}
+
 function setResult(markdown) {
   currentDna = markdown;
   if (loadingCard) loadingCard.hidden = true;
   if (outputPlaceholder) outputPlaceholder.hidden = true;
   if (dnaResult) {
     dnaResult.hidden = false;
-    dnaResult.textContent = markdown;
+    renderVisibleSummary(markdown);
   }
   if (nextSteps) nextSteps.hidden = false;
   if (outputHeading) outputHeading.textContent = "Voice DNA ready";
