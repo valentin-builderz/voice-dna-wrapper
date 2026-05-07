@@ -153,6 +153,41 @@ function getSummaryFromDna(markdown) {
   return firstParagraph || "Your Voice DNA is ready. The full profile is available to copy or download below.";
 }
 
+function getSummaryParts(summary) {
+  const sentences = summary
+    .split(/(?<=[.!?])\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return [
+    {
+      label: "Voice",
+      icon: "voice",
+      text: sentences.slice(0, 2).join(" ") || summary,
+    },
+    {
+      label: "Rhythm",
+      icon: "rhythm",
+      text: sentences.find((item) => /sentence|rhythm|pace|short|long|punch|direct|plain/i.test(item)) || sentences[2] || "The full DNA captures sentence rhythm, pacing, and how ideas are usually shaped.",
+    },
+    {
+      label: "Rules",
+      icon: "rules",
+      text: sentences.find((item) => /avoid|never|hype|corporate|buzzword|shallow|generic/i.test(item)) || "The full DNA includes what to avoid so future drafts do not drift into generic AI writing.",
+    },
+  ];
+}
+
+function getSummaryIcon(name) {
+  const icons = {
+    voice: '<path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9.5a4 4 0 0 1 0 5"/>',
+    rhythm: '<path d="M4 18c3-9 5-9 8 0s5 9 8 0"/><path d="M4 6h16"/>',
+    rules: '<path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h4"/>',
+  };
+
+  return `<svg class="summary-icon" viewBox="0 0 24 24" aria-hidden="true">${icons[name]}</svg>`;
+}
+
 function renderVisibleSummary(markdown) {
   if (!dnaResult) return;
   const summary = getSummaryFromDna(markdown);
@@ -161,14 +196,26 @@ function renderVisibleSummary(markdown) {
   const title = document.createElement("h3");
   title.textContent = "How you sound";
 
-  const body = document.createElement("p");
-  body.textContent = summary;
+  const intro = document.createElement("p");
+  intro.className = "dna-result__intro";
+  intro.textContent = "Here is the readable version. The detailed Voice DNA stays packaged in the background for copy and download.";
+
+  const grid = document.createElement("div");
+  grid.className = "summary-grid";
+
+  getSummaryParts(summary).forEach((part) => {
+    const card = document.createElement("section");
+    card.className = "summary-card";
+    card.innerHTML = `${getSummaryIcon(part.icon)}<div><strong>${part.label}</strong><p></p></div>`;
+    card.querySelector("p").textContent = part.text;
+    grid.append(card);
+  });
 
   const note = document.createElement("p");
   note.className = "dna-result__note";
   note.textContent = "The full Voice DNA is ready in the background. Copy it or download the Markdown file below and attach it the next time you use AI.";
 
-  dnaResult.append(title, body, note);
+  dnaResult.append(title, intro, grid, note);
 }
 
 function setResult(markdown) {
