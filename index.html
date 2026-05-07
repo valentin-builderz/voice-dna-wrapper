@@ -22,118 +22,113 @@
     <section class="generator-intro generator-intro--compact" aria-labelledby="generator-title">
       <div class="container generator-intro__grid">
         <div>
-          <p class="eyebrow">Private room · Voice extraction</p>
-          <h1 id="generator-title">Build the voice layer before you ask for copy.</h1>
+          <p class="eyebrow">Private room · Voice DNA</p>
+          <h1 id="generator-title">Make AI write like it actually knows you.</h1>
         </div>
         <div class="workspace-brief">
-          <p>Paste real writing. Add the context a ghostwriter would need. The system returns a reusable Voice DNA profile and prompt block for future chats.</p>
+          <p>Paste a few things you have written. Get a Voice DNA file you can reuse whenever you want posts, emails, pages, or articles that sound unmistakably like you.</p>
         </div>
       </div>
     </section>
 
     <section class="generator-workspace" aria-label="Voice Room">
-      <div class="container workspace-grid">
-        <aside class="process-rail" aria-label="Extraction progress">
-          <div class="process-step is-active" data-step="corpus">
-            <span>01</span>
-            <p>Corpus</p>
-          </div>
-          <div class="process-step" data-step="context">
-            <span>02</span>
-            <p>Context</p>
-          </div>
-          <div class="process-step" data-step="boundaries">
-            <span>03</span>
-            <p>Boundaries</p>
-          </div>
-          <div class="process-step" data-step="output">
-            <span>04</span>
-            <p>Voice asset</p>
-          </div>
-        </aside>
-
+      <div class="container workspace-grid workspace-grid--guided">
         <form class="dna-panel dna-form studio-panel" id="voiceDnaForm" novalidate>
           <div class="panel-topline">
-            <span>Input material</span>
+            <span>Step 1 of 2</span>
             <span id="readinessLabel">Not enough signal</span>
           </div>
 
           <section class="studio-section" data-step-section="corpus" aria-labelledby="corpus-heading">
             <div class="section-kicker">
-              <span>01</span>
-              <h2 id="corpus-heading">Corpus</h2>
+              <h2 id="corpus-heading">Paste your writing</h2>
             </div>
+            <p class="section-help">Use posts, emails, notes, articles, or client messages. Anything that sounds like you works.</p>
             <div class="field-group field-group--primary" id="samplesGroup">
               <div class="label-row">
-                <label for="samples">Writing samples <span>required</span></label>
+                <label for="samples">Your examples <span>required</span></label>
                 <output id="wordCount" for="samples">0 words</output>
               </div>
-              <textarea id="samples" name="samples" rows="14" placeholder="Paste 3-5 pieces that sound like you: posts, emails, essays, notes, sales copy, internal memos, or rough drafts." required minlength="500"></textarea>
-              <p id="samplesHelp">Minimum viable signal starts around 500 characters. Standard confidence starts around 3,000 words. Forensic confidence starts around 10,000 words.</p>
+              <textarea id="samples" name="samples" rows="14" placeholder="Paste 3-5 examples here." required minlength="500"></textarea>
             </div>
 
-            <div class="readiness-meter" aria-label="Corpus readiness">
+            <div class="readiness-meter" aria-label="Voice DNA precision">
+              <div class="precision-copy">
+                <strong>Precision bar</strong>
+                <span id="precisionDetail">Paste more writing to unlock a sharper Voice DNA.</span>
+              </div>
               <div class="readiness-meter__bar"><span id="readinessBar"></span></div>
               <div class="readiness-meter__labels">
-                <span>Preliminary</span>
-                <span>Standard</span>
-                <span>Forensic</span>
+                <span>Starter</span>
+                <span>Sharp</span>
+                <span>Deep read</span>
               </div>
             </div>
           </section>
 
-          <section class="studio-section" data-step-section="context" aria-labelledby="context-heading">
-            <div class="section-kicker">
-              <span>02</span>
-              <h2 id="context-heading">Context</h2>
-            </div>
-            <div class="field-grid">
-              <div class="field-group">
-                <label for="audience">Who do you write for? <span>optional</span></label>
-                <textarea id="audience" name="audience" rows="5" placeholder="Senior operators, founders, consultants, buyers, clients..."></textarea>
+          <details class="accuracy-details" data-step-section="context">
+            <summary>
+              <span>Improve accuracy</span>
+              <small>Share readers and background</small>
+            </summary>
+            <div class="accuracy-details__body">
+              <div class="field-grid">
+                <div class="field-group">
+                  <label for="audience">Who reads what you write?</label>
+                  <textarea id="audience" name="audience" rows="4" placeholder="Founders, clients, buyers, your team..."></textarea>
+                </div>
+                <div class="field-group">
+                  <label for="context">What do you do?</label>
+                  <textarea id="context" name="context" rows="4" placeholder="Share your background, work, offer, or industry. This increases accuracy."></textarea>
+                </div>
               </div>
               <div class="field-group">
-                <label for="context">What should the model understand? <span>optional</span></label>
-                <textarea id="context" name="context" rows="5" placeholder="Your offer, beliefs, industry, recurring enemies, positioning, standards..."></textarea>
+                <label for="avoid">What should it never sound like?</label>
+                <input id="avoid" name="avoid" type="text" placeholder="Generic AI, hype, fake intimacy, empty thought leadership...">
               </div>
             </div>
-          </section>
-
-          <section class="studio-section" data-step-section="boundaries" aria-labelledby="boundaries-heading">
-            <div class="section-kicker">
-              <span>03</span>
-              <h2 id="boundaries-heading">Boundaries</h2>
-            </div>
-            <div class="field-group">
-              <label for="avoid">What should your copy never sound like? <span>optional</span></label>
-              <input id="avoid" name="avoid" type="text" placeholder="Generic AI, hype, creator-bro language, fake intimacy, empty thought leadership...">
-            </div>
-          </section>
+          </details>
 
           <div class="studio-actions">
             <button class="button button--primary dna-submit" id="generateButton" type="submit">Generate my Voice DNA</button>
             <button class="button button--ghost" id="clearDraft" type="button">Clear draft</button>
           </div>
           <p class="form-status" id="dnaStatus" role="status" aria-live="polite"></p>
+
+          <aside class="privacy-note" aria-label="Privacy notice">
+            <strong>Privacy</strong>
+            <p>Generated with the Grok API. API data is not used for training by default. Builderz World does not read or store your submitted text. Full privacy policy coming soon at <a href="https://builderzworld.com/privacy" target="_blank" rel="noreferrer">builderzworld.com/privacy</a>.</p>
+          </aside>
         </form>
 
-        <aside class="dna-panel dna-output studio-panel" data-step-section="output" aria-labelledby="output-heading">
+        <aside class="dna-panel dna-output studio-panel dna-output--quiet" data-step-section="output" aria-labelledby="output-heading">
           <div class="panel-topline">
-            <span>Voice asset</span>
+            <span>Step 2 of 2</span>
             <span id="outputState">Waiting</span>
           </div>
-          <h2 id="output-heading">Your Voice DNA will appear here.</h2>
-          <div class="output-placeholder" id="outputPlaceholder">
-            <p>The finished asset is designed to travel with your future chats:</p>
-            <div class="artifact-list">
-              <div><span>01</span><p>Voice profile</p></div>
-              <div><span>02</span><p>Belief map</p></div>
-              <div><span>03</span><p>Sentence rhythm</p></div>
-              <div><span>04</span><p>Copy rules</p></div>
-              <div><span>05</span><p>Paste-ready prompt block</p></div>
+          <h2 id="output-heading">Your file appears here</h2>
+          <div class="loading-card" id="loadingCard" hidden>
+            <div class="loading-mark" aria-hidden="true"></div>
+            <div>
+              <strong>Building your Voice DNA</strong>
+              <p>Reading your samples, finding repeated patterns, and turning them into a reusable AI instruction file.</p>
             </div>
           </div>
+          <div class="output-placeholder" id="outputPlaceholder">
+            <p>In a few minutes, you will have a reusable voice file for AI: your rhythm, phrasing, point of view, and copy rules in one place.</p>
+          </div>
           <article class="dna-result" id="dnaResult" hidden></article>
+          <section class="next-steps" id="nextSteps" hidden aria-labelledby="next-steps-heading">
+            <p class="next-steps__kicker">Use it today</p>
+            <h3 id="next-steps-heading">5 things you can create right now</h3>
+            <div class="use-case-grid">
+              <article><span>01</span><strong>Posts for socials</strong><p>Attach the file and ask for LinkedIn, X, or Instagram posts.</p></article>
+              <article><span>02</span><strong>Emails</strong><p>Turn rough thoughts into emails without losing your tone.</p></article>
+              <article><span>03</span><strong>Websites</strong><p>Use it for hero sections, offer copy, about pages, and CTAs.</p></article>
+              <article><span>04</span><strong>Blog articles</strong><p>Draft long-form pieces with your rhythm and point of view.</p></article>
+              <article><span>05</span><strong>Prompts for AI</strong><p>Paste it into any new chat before asking for content.</p></article>
+            </div>
+          </section>
           <div class="output-actions">
             <button class="button button--ghost" id="copyDna" type="button" disabled>Copy Voice DNA</button>
             <button class="button button--ghost" id="downloadDna" type="button" disabled>Download .md</button>

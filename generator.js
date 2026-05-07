@@ -8,6 +8,8 @@ const dnaResult = document.querySelector("#dnaResult");
 const outputPlaceholder = document.querySelector("#outputPlaceholder");
 const outputHeading = document.querySelector("#output-heading");
 const outputState = document.querySelector("#outputState");
+const loadingCard = document.querySelector("#loadingCard");
+const nextSteps = document.querySelector("#nextSteps");
 const copyDna = document.querySelector("#copyDna");
 const downloadDna = document.querySelector("#downloadDna");
 const clearDraft = document.querySelector("#clearDraft");
@@ -15,8 +17,7 @@ const generateButton = document.querySelector("#generateButton");
 const wordCount = document.querySelector("#wordCount");
 const readinessLabel = document.querySelector("#readinessLabel");
 const readinessBar = document.querySelector("#readinessBar");
-const processSteps = [...document.querySelectorAll(".process-step")];
-const stepSections = [...document.querySelectorAll("[data-step-section]:not([data-step-section='output'])")];
+const precisionDetail = document.querySelector("#precisionDetail");
 
 const STORAGE_KEY = "builderz.voiceDnaDraft.v1";
 let currentDna = "";
@@ -30,7 +31,7 @@ function getReadiness(words, chars) {
   if (chars < 500) {
     return {
       label: "Not enough signal",
-      detail: "Paste more of your real writing before generating.",
+      detail: "Paste more real writing to unlock the generator.",
       percent: Math.min(18, chars / 500 * 18),
       level: "low",
       canSubmit: false,
@@ -39,8 +40,8 @@ function getReadiness(words, chars) {
 
   if (words < 3000) {
     return {
-      label: "Preliminary signal",
-      detail: "Enough to run. Add more samples if you want a sharper read.",
+      label: "Starter precision",
+      detail: "Enough to run. Add more examples for a sharper read.",
       percent: 26 + Math.min(32, words / 3000 * 32),
       level: "preliminary",
       canSubmit: true,
@@ -49,8 +50,8 @@ function getReadiness(words, chars) {
 
   if (words < 10000) {
     return {
-      label: "Standard confidence",
-      detail: "Good corpus for a practical Voice DNA.",
+      label: "Sharp precision",
+      detail: "Strong enough for a useful Voice DNA.",
       percent: 60 + Math.min(28, (words - 3000) / 7000 * 28),
       level: "standard",
       canSubmit: true,
@@ -58,8 +59,8 @@ function getReadiness(words, chars) {
   }
 
   return {
-    label: "Forensic confidence",
-    detail: "Strong corpus. The extraction has room to find real patterns.",
+    label: "Deep read unlocked",
+    detail: "Excellent signal. The system can find subtle patterns now.",
     percent: 100,
     level: "forensic",
     canSubmit: true,
@@ -76,12 +77,6 @@ function setOutputState(label) {
   if (outputState) outputState.textContent = label;
 }
 
-function setActiveStep(step) {
-  processSteps.forEach((item) => {
-    item.classList.toggle("is-active", item.dataset.step === step);
-  });
-}
-
 function updateReadiness() {
   if (!samples) return;
   const text = samples.value;
@@ -90,13 +85,13 @@ function updateReadiness() {
 
   if (wordCount) wordCount.textContent = `${words.length.toLocaleString()} words`;
   if (readinessLabel) readinessLabel.textContent = readiness.label;
+  if (precisionDetail) precisionDetail.textContent = readiness.detail;
   if (readinessBar) {
     readinessBar.style.width = `${readiness.percent}%`;
     readinessBar.dataset.level = readiness.level;
   }
   if (generateButton) generateButton.disabled = !readiness.canSubmit;
 
-  setStatus(readiness.detail, readiness.canSubmit ? "neutral" : "warning");
   return readiness;
 }
 
@@ -136,26 +131,29 @@ function restoreDraft() {
 
 function setResult(markdown) {
   currentDna = markdown;
+  if (loadingCard) loadingCard.hidden = true;
   if (outputPlaceholder) outputPlaceholder.hidden = true;
   if (dnaResult) {
     dnaResult.hidden = false;
     dnaResult.textContent = markdown;
   }
-  if (outputHeading) outputHeading.textContent = "Voice DNA generated.";
+  if (nextSteps) nextSteps.hidden = false;
+  if (outputHeading) outputHeading.textContent = "Voice DNA ready";
   if (copyDna) copyDna.disabled = !markdown;
   if (downloadDna) downloadDna.disabled = !markdown;
   setOutputState("Complete");
-  setActiveStep("output");
 }
 
 function resetResult() {
   currentDna = "";
+  if (loadingCard) loadingCard.hidden = true;
   if (outputPlaceholder) outputPlaceholder.hidden = false;
   if (dnaResult) {
     dnaResult.hidden = true;
     dnaResult.textContent = "";
   }
-  if (outputHeading) outputHeading.textContent = "Your Voice DNA will appear here.";
+  if (nextSteps) nextSteps.hidden = true;
+  if (outputHeading) outputHeading.textContent = "Your file appears here";
   if (copyDna) copyDna.disabled = true;
   if (downloadDna) downloadDna.disabled = true;
   setOutputState("Waiting");
@@ -182,38 +180,10 @@ updateReadiness();
   field.addEventListener("input", () => {
     if (field === samples) {
       updateReadiness();
-      setActiveStep("corpus");
-    } else if (field === audience || field === contextField) {
-      setActiveStep("context");
-    } else if (field === avoid) {
-      setActiveStep("boundaries");
     }
     scheduleAutosave();
   });
 });
-
-if ("IntersectionObserver" in window && stepSections.length) {
-  const visibleSections = new Map();
-  const stepObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        visibleSections.set(entry.target.dataset.stepSection, entry.intersectionRatio);
-      } else {
-        visibleSections.delete(entry.target.dataset.stepSection);
-      }
-    });
-
-    const [activeStep] = [...visibleSections.entries()]
-      .sort((a, b) => b[1] - a[1])[0] || [];
-
-    if (activeStep) setActiveStep(activeStep);
-  }, {
-    rootMargin: "-28% 0px -46% 0px",
-    threshold: [0.1, 0.25, 0.5, 0.75],
-  });
-
-  stepSections.forEach((section) => stepObserver.observe(section));
-}
 
 voiceDnaForm?.addEventListener("change", scheduleAutosave);
 
@@ -232,10 +202,14 @@ if (voiceDnaForm) {
     formData.depth = "deep";
 
     voiceDnaForm.classList.add("is-loading");
-    if (generateButton) generateButton.textContent = "Extracting signal...";
+    if (loadingCard) loadingCard.hidden = false;
+    if (outputPlaceholder) outputPlaceholder.hidden = true;
+    if (nextSteps) nextSteps.hidden = true;
+    if (dnaResult) dnaResult.hidden = true;
+    if (generateButton) generateButton.textContent = "Building your Voice DNA...";
+    if (outputHeading) outputHeading.textContent = "Reading your voice patterns now.";
     setOutputState("Running");
-    setActiveStep("output");
-    setStatus("Running the full Voice DNA extraction. This can take a little while.", "neutral");
+    setStatus("Building your Voice DNA. This can take a little while.", "neutral");
 
     try {
       const response = await fetch("/api/generate-voice-dna", {
@@ -251,9 +225,11 @@ if (voiceDnaForm) {
       }
 
       setResult(data.voiceDna);
-      setStatus("Voice DNA generated. Review it, then copy or download the profile.", "success");
+      setStatus("Voice DNA ready. Copy it, download it, or attach the .md file next time you use AI.", "success");
       saveDraft();
     } catch (error) {
+      if (loadingCard) loadingCard.hidden = true;
+      if (!currentDna && outputPlaceholder) outputPlaceholder.hidden = false;
       setOutputState("Needs attention");
       setStatus(error.message, "error");
     } finally {
@@ -288,5 +264,4 @@ clearDraft?.addEventListener("click", () => {
   localStorage.removeItem(STORAGE_KEY);
   resetResult();
   updateReadiness();
-  setActiveStep("corpus");
 });
